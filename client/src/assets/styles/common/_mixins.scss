@@ -1,0 +1,5 @@
+@import './variables';
+
+@mixin object_centering {
+  margin: $margin_center;
+}

@@ -1,0 +1,29 @@
+@import '../../../assets/styles/common/variables';
+
+.input-default {
+  width: 440px;
+  height: 42px;
+  border-radius: 100px;
+  padding: 12px $padding_default;
+  font-size: $xxs;
+
+  color: $grey_color;
+  background-color: white;
+
+  transition: color $transition;
+}
+
+.input-default:focus {
+  color: $dark_color;
+}
+.input-default::placeholder {
+  transition: color $transition;
+}
+
+.input-default:hover::placeholder {
+  color: $dark_color;
+}
+
+.input-default:focus::placeholder {
+  color: $dark_color;
+}

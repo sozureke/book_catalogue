@@ -1,0 +1,48 @@
+@import '../../../assets/styles/common/variables';
+
+.modal_window {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  max-width: 980px;
+  padding: $padding_default;
+  background-color: $light_dark_color;
+  border-radius: 20px;
+  margin: $margin_center;
+}
+
+.information_container {
+  display: flex;
+  flex-direction: column;
+  gap: $padding_default;
+  max-width: calc(50% - 10px);
+}
+
+.text_container {
+  display: flex;
+  flex-direction: column;
+  gap: $padding_default;
+}
+
+.container_paragraph {
+  font-size: $xs;
+  color: grey;
+}
+
+.button-default {
+  max-width: 80px;
+}
+
+strong {
+  font-weight: bold;
+  color: white;
+}
+
+.image_container {
+  width: calc(50% - 10px);
+  height: auto;
+  border-radius: 10px;
+  object-fit: cover;
+  background-color: white;
+  padding: $padding_default;
+}

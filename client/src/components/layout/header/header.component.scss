@@ -1,0 +1,42 @@
+@import '../../../assets/styles/common/variables';
+
+.header {
+  display: flex;
+  padding: 1.25rem 0;
+  align-items: center;
+  justify-content: space-between;
+  gap: 4.813rem;
+  margin-top: $padding_default;
+}
+
+.header_logo {
+  transition: all $transition;
+}
+
+.header_logo:hover {
+  scale: 1.02;
+}
+
+.header_navigation_list {
+  display: flex;
+  gap: 2.5rem;
+}
+
+.list_item {
+  color: $grey_color;
+  transition: all $transition;
+}
+
+.list_item:hover {
+  color: white;
+}
+
+.list_item:focus {
+  color: white;
+  box-shadow: 0 0 0 2px white;
+}
+
+.header_buttons_list {
+  display: flex;
+  gap: 12px;
+}

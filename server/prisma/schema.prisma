@@ -1,0 +1,67 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updateAt  DateTime @updatedAt @map("updated_at")
+
+  email      String       @unique
+  name       String
+  surname    String
+  password   String
+  Collection Collection[]
+
+  @@map("user")
+}
+
+model Book {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updateAt  DateTime @updatedAt @map("updated_at")
+
+  name           String           @unique
+  author         String
+  description    String
+  category       String[]
+  image          String
+  CollectionBook CollectionBook[]
+
+  @@map("book")
+}
+
+model Collection {
+  id        Int      @id @default(autoincrement())
+  createdAt DateTime @default(now()) @map("created_at")
+  updateAt  DateTime @updatedAt @map("updated_at")
+
+  name     String @unique
+  iconPath String @map("icon_path")
+
+  user   User @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId Int  @map("user_id")
+
+  CollectionBook CollectionBook[]
+
+  @@map("collection")
+}
+
+model CollectionBook {
+  id           Int      @id @default(autoincrement())
+  createdAt    DateTime @default(now()) @map("created_at")
+  updateAt     DateTime @updatedAt @map("updated_at")
+  bookId       Int
+  collectionId Int
+
+  book       Book       @relation(fields: [bookId], references: [id])
+  collection Collection @relation(fields: [collectionId], references: [id], onDelete: Cascade)
+
+  @@unique([collectionId, bookId], name: "collectionId_bookId")
+  @@map("collection_book")
+}

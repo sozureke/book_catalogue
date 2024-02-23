@@ -1,0 +1,27 @@
+@import '../../../assets/styles/common/variables';
+
+.newsletter_block {
+  background-color: $accent_color;
+  padding: $padding_default;
+  border-radius: 1.875rem;
+}
+
+.input_block {
+  display: flex;
+  flex-direction: column;
+  gap: 0.875rem;
+  margin: $padding_default 0 $padding_default 0;
+}
+
+.newsletter_button {
+  padding: 8px 14px;
+  background-color: white;
+  color: $grey_color;
+  font-size: $xxs;
+
+  transition: all $transition;
+}
+
+.newsletter_button:hover {
+  color: white;
+}
