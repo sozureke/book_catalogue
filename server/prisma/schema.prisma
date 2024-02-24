@@ -27,10 +27,11 @@ model Book {
   updateAt  DateTime @updatedAt @map("updated_at")
 
   name           String           @unique
-  author         String
+  author         Json
   description    String
-  category       String[]
+  category       Json
   image          String
+  links          Json
   CollectionBook CollectionBook[]
 
   @@map("book")

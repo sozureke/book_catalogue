@@ -16,7 +16,7 @@ import { BookFields } from '../utils/book.utils'
 export const createNewBook = asyncHandler(
 	async (req: Request, res: Response) => {
 		// Extract book details from the request body.
-		const { name, author, description, category, image } = req.body
+		const { name, author, description, category, image, links } = req.body
 
 		// Check if a book with the same name already exists in the database.
 		const isCreated = await prisma.book.findUnique({
@@ -37,7 +37,8 @@ export const createNewBook = asyncHandler(
 					author,
 					description,
 					category,
-					image
+					image,
+					links
 				},
 				select: BookFields // Select specific fields to return in the response.
 			})
@@ -88,7 +89,7 @@ export const getBook = asyncHandler(async (req: Request, res: Response) => {
  *                          book or an error message.
  */
 export const updateBook = asyncHandler(async (req: Request, res: Response) => {
-	const { name, author, description, category, image } = req.body
+	const { name, author, description, category, image, links } = req.body
 	try {
 		const book = await prisma.book.update({
 			where: {
@@ -105,8 +106,7 @@ export const updateBook = asyncHandler(async (req: Request, res: Response) => {
 
 		res.json(book)
 	} catch (error) {
-		res.status(404)
-		throw new Error('The book not found!')
+		res.status(404).json({ error: 'The book not found!' })
 	}
 })
 
@@ -130,7 +130,19 @@ export const deleteBook = asyncHandler(async (req: Request, res: Response) => {
 			message: `The book is deleted successfully! ID: ${+req.params.id}, NAME: ${book.name}`
 		})
 	} catch (error) {
-		res.status(404)
-		throw new Error('The book not found!')
+		res.status(404).json({ error: 'The book not found!' })
 	}
 })
+
+export const deleteAllRecords = async (req: Request, res: Response) => {
+	try {
+		const deleteCount = await prisma.book.deleteMany({})
+		await prisma.$executeRaw`ALTER SEQUENCE "book_id_seq" RESTART WITH 1;`
+		res.json({
+			message: `All records are deleted successfully! Total records deleted: ${deleteCount.count}`
+		})
+	} catch (error) {
+		console.error('Error deleting records:', error)
+		res.status(500).json({ error: 'An error occurred while deleting records!' })
+	}
+}

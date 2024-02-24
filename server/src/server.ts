@@ -7,6 +7,7 @@ import { prisma } from './prisma'
 import authRoutes from './auth/auth.routes'
 import bookRoutes from './book/book.routes'
 import collectionRoutes from './collection/collection.routes'
+import googleBooksRoutes from './google_books/google-book.routes'
 import userRoutes from './user/user.routes'
 
 import { errorHandler, notFound } from './middleware/error.middleware'
@@ -24,6 +25,7 @@ async function main() {
 	app.use('/api/users', userRoutes)
 	app.use('/api/books', bookRoutes)
 	app.use('/api/collections', collectionRoutes)
+	app.use('/api/get-books', googleBooksRoutes)
 
 	// middleware
 	app.use(notFound)

@@ -1,7 +1,7 @@
 import { Request, Response } from 'express'
 import asyncHandler from 'express-async-handler'
 import { prisma } from '../prisma'
-import { addBookToCollectionFields } from '../utils/addbook.utils'
+import { addBookToCollectionFields } from '../utils/add-book.utils'
 import { CollectionFields } from '../utils/collection.utils'
 
 /**
@@ -22,15 +22,14 @@ export const createNewCollection = asyncHandler(
 
 		const { name, iconPath } = req.body
 
-		const isCreated = await prisma.collection.findUnique({
+		const existingCollection = await prisma.collection.findUnique({
 			where: {
 				name: name
 			}
 		})
 
-		if (isCreated) {
-			res.status(409)
-			throw new Error('The collection is already exist')
+		if (existingCollection) {
+			res.status(409).json({ error: 'The collection is already exist' })
 		} else {
 			const createCollection = await prisma.collection.create({
 				data: {
@@ -56,7 +55,7 @@ export const createNewCollection = asyncHandler(
  */
 export const GetCollection = asyncHandler(
 	async (req: Request, res: Response) => {
-		const collections = await prisma.collection.findUnique({
+		const collection = await prisma.collection.findUnique({
 			where: {
 				id: +req.params.id
 			},
@@ -68,8 +67,11 @@ export const GetCollection = asyncHandler(
 				}
 			}
 		})
+		if (!collection) {
+			res.status(404).json({ message: 'Collection not found!' })
+		}
 
-		res.json(collections)
+		res.json(collection)
 	}
 )
 
@@ -95,6 +97,10 @@ export const GetCollections = asyncHandler(
 				}
 			}
 		})
+
+		if (collections.length === 0) {
+			res.status(404).json({ message: 'Collections have not yet been made' })
+		}
 
 		const numberOfBooks = await Promise.all(
 			collections.map(async collection => {
@@ -146,9 +152,9 @@ export const updateCollection = asyncHandler(
 				}
 			})
 
-			res.json(collection) // Send the updated collection data as a JSON response
+			res.json(collection)
 		} catch (error) {
-			res.status(404).json({ message: 'Collection not found!' }) // Return an error if the collection is not found
+			res.status(404).json({ message: 'Collection not found!' })
 		}
 	}
 )
@@ -174,8 +180,7 @@ export const deleteCollection = asyncHandler(
 				message: `The collection is deleted successfully! ID: ${+req.params.id}, NAME: ${collection.name}`
 			})
 		} catch (error) {
-			res.status(404)
-			throw new Error('The collection not found!')
+			res.status(404).json({ error: 'The collection not found!' })
 		}
 	}
 )
@@ -202,8 +207,7 @@ export const addBookToCollection = asyncHandler(
 		})
 
 		if (existingAllocation) {
-			res.status(409)
-			throw new Error('The book is already added to the collection')
+			res.status(409).json({ error: 'The book is already in the collection' })
 		} else {
 			const addBookToCollection = await prisma.collectionBook.create({
 				data: {
